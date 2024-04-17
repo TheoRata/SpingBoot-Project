@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import com.theodor.databasenew.TestDataUtil;
 import com.theodor.databasenew.dao.impl.BookDaoimpl;
 import com.theodor.databasenew.domain.Book;
 
@@ -26,11 +27,7 @@ public class BookDaoImplTest {
     @Test
     public void testCreateBookGeneratesCorrectSQL() {
 
-        Book book = Book.builder()
-                .isbn("1234-2345-234-0")
-                .title("Bucuresti")
-                .authorId(1L)
-                .build();
+        Book book = TestDataUtil.createTestBookA();
 
         underTest.create(book);
 
@@ -43,12 +40,23 @@ public class BookDaoImplTest {
     @Test
     public void testFindOneGeneratesCorrectBookSQL(){
 
-        underTest.find("1234-2345-234-0");
+        underTest.findOne("1234-2345-234-0");
 
         verify(jdbcTemplate).query(
             eq("SELECT isbn, title, author_id FROM books WHERE isbn = ? LIMIT 1"),
             ArgumentMatchers.<BookDaoimpl.BookRowMapper>any(),
             eq("1234-2345-234-0")
         );
+    }
+    
+    @Test
+    public void testThatFindGeneratesCorrectSQL(){
+
+        underTest.find();
+        verify(jdbcTemplate).query(
+            eq("SELECT isbn, title, author_id FROM books"),
+            ArgumentMatchers.<BookDaoimpl.BookRowMapper>any()
+            );
+
     }
 }

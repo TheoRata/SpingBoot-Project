@@ -25,7 +25,7 @@ public class BookDaoImplTest {
     private JdbcTemplate jdbcTemplate;
 
     @Test
-    public void testCreateBookGeneratesCorrectSQL() {
+    public void testCreateBookGeneratesCorrectSql() {
 
         Book book = TestDataUtil.createTestBookA();
 
@@ -38,7 +38,7 @@ public class BookDaoImplTest {
     }
 
     @Test
-    public void testFindOneGeneratesCorrectBookSQL(){
+    public void testFindOneGeneratesCorrectBookSql(){
 
         underTest.findOne("1234-2345-234-0");
 
@@ -50,7 +50,7 @@ public class BookDaoImplTest {
     }
     
     @Test
-    public void testThatFindGeneratesCorrectSQL(){
+    public void testThatFindGeneratesCorrectSql(){
 
         underTest.find();
         verify(jdbcTemplate).query(
@@ -58,5 +58,27 @@ public class BookDaoImplTest {
             ArgumentMatchers.<BookDaoimpl.BookRowMapper>any()
             );
 
+    }
+
+    @Test
+    public void testUpdateBookGeneratesCorrectSql(){
+        Book book = TestDataUtil.createTestBookA();
+        underTest.update("1234-2345-234-0",book);
+
+        verify(jdbcTemplate).update(
+            "UPDATE books SET isbn = ?, title = ?, author_id = ?  WHERE isbn = ?", 
+            "1234-2345-234-0", "Bucuresti", 1L, "1234-2345-234-0"  
+            );
+    }
+
+    @Test
+    public void testDeleteBookGeneratesCorrectSql(){
+        Book book = TestDataUtil.createTestBookA();
+        underTest.delete("1234-2345-234-0");
+
+        verify(jdbcTemplate).update(
+            "DELETE FROM books WHERE isbn = ?", 
+            "1234-2345-234-0"
+            );
     }
 }

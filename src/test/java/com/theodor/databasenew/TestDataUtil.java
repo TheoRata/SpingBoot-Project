@@ -46,14 +46,14 @@ public final class TestDataUtil {
         return Book.builder()
                 .isbn("6789-9078-55-1")
                 .title("Braila")
-                .authorId(1L)
+                .authorId(2L)
                 .build();
     }
     public static Book createTestBookC() {
         return Book.builder()
                 .isbn("99-987-678-2")
                 .title("Galati")
-                .authorId(1L)
+                .authorId(3L)
                 .build();
     }
 

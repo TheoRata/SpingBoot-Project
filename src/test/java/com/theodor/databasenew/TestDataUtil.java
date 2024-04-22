@@ -1,6 +1,6 @@
 package com.theodor.databasenew;
 
-import org.junit.jupiter.api.Test;
+
 
 import com.theodor.databasenew.domain.Author;
 import com.theodor.databasenew.domain.Book;
@@ -35,25 +35,25 @@ public final class TestDataUtil {
         return author;
     }
 
-    public static Book createTestBookA() {
+    public static Book createTestBookA(final Author author) {
         return Book.builder()
                 .isbn("1234-2345-234-0")
                 .title("Bucuresti")
-                .authorId(1L)
+                .author(author)
                 .build();
     }
-    public static Book createTestBookB() {
+    public static Book createTestBookB(final Author author) {
         return Book.builder()
                 .isbn("6789-9078-55-1")
                 .title("Braila")
-                .authorId(2L)
+                .author(author)
                 .build();
     }
-    public static Book createTestBookC() {
+    public static Book createTestBookC(final Author author) {
         return Book.builder()
                 .isbn("99-987-678-2")
                 .title("Galati")
-                .authorId(3L)
+                .author(author)
                 .build();
     }
 

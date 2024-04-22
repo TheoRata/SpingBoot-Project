@@ -1,4 +1,4 @@
-package com.theodor.databasenew.dao.impl;
+package com.theodor.databasenew.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.theodor.databasenew.TestDataUtil;
@@ -18,12 +19,12 @@ import com.theodor.databasenew.domain.Author;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class AuthorDaoImplIntegrationTests {
+public class AuthorRepositoryIntegrationTests {
 
-    private AuthorDaoImpl underTest;
+    private AuthorRepository underTest;
 
     @Autowired
-    public AuthorDaoImplIntegrationTests(AuthorDaoImpl underTest) { 
+    public AuthorRepositoryIntegrationTests(AuthorRepository underTest) { 
         this.underTest = underTest;
     }
 
@@ -31,9 +32,9 @@ public class AuthorDaoImplIntegrationTests {
     @Test
     public void testAuthorCanBeCreatedAndRecalled(){
         
-        Author author = TestDataUtil.createTestAutorA();
-        underTest.create(author);
-        Optional<Author> result = underTest.findOne(author.getId());
+        Author author = TestDataUtil.createTestAutorB();
+        underTest.save(author);
+        Optional<Author> result = underTest.findById(author.getId());
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(author);
 
@@ -42,23 +43,27 @@ public class AuthorDaoImplIntegrationTests {
     @Test
     public void testThatMultipleAuthorsCanBeCreatedAndRecalled(){
         Author authorA = TestDataUtil.createTestAutorA();
-        underTest.create(authorA);
         Author authorB = TestDataUtil.createTestAutorB();
-        underTest.create(authorB);
         Author authorC = TestDataUtil.createTestAutorC();
-        underTest.create(authorC);
+       
+        
+        underTest.save(authorA);
+        underTest.save(authorB);
+        underTest.save(authorC);
+        
+        
 
-        List<Author> result = underTest.find();
+        Iterable<Author> result = underTest.findAll();
         assertThat(result).hasSize(3).containsExactly(authorA, authorB, authorC);
     }
     
     @Test
     public void testThatAuthorCanBeUpdated(){
         Author authorA = TestDataUtil.createTestAutorA();
-        underTest.create(authorA);
-        authorA.setName("MIAU");
-        underTest.update(authorA.getId(), authorA);
-        Optional<Author> result = underTest.findOne(authorA.getId());
+        underTest.save(authorA);
+        authorA.setName("MIAU"); 
+        underTest.save(authorA);
+        Optional<Author> result = underTest.findById(authorA.getId());
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(authorA);
     }
@@ -66,10 +71,24 @@ public class AuthorDaoImplIntegrationTests {
     @Test
     public void testThatAuthorCanBeDeleted(){
         Author authorA = TestDataUtil.createTestAutorA();
-        underTest.create(authorA);
-        underTest.delete(authorA.getId());
-        Optional<Author> result = underTest.findOne(authorA.getId());
+        underTest.save(authorA);
+        underTest.deleteById(authorA.getId());
+        Optional<Author> result = underTest.findById(authorA.getId());
         assertThat(result).isEmpty();
+
+    }
+
+    @Test
+    public void testAuthorWithAgeLessThan(){
+        Author authorA = TestDataUtil.createTestAutorA();
+        underTest.save(authorA);
+        Author authorB = TestDataUtil.createTestAutorB();
+        underTest.save(authorB);
+        Author authorC = TestDataUtil.createTestAutorC();
+        underTest.save(authorC);
+
+        Iterable<Author> results = underTest.ageLessThan(50);
+        assertThat(results).containsExactly(authorA, authorB);
 
     }
 }

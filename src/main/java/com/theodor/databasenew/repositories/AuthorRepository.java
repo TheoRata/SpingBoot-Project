@@ -3,11 +3,11 @@ package com.theodor.databasenew.repositories;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.theodor.databasenew.domain.Author;
+import com.theodor.databasenew.domain.entities.AuthorEntity;
 
 @Repository
-public interface AuthorRepository extends CrudRepository<Author, Long>{
+public interface AuthorRepository extends CrudRepository<AuthorEntity, Long>{
     
-    Iterable<Author> ageLessThan(int age);
+    Iterable<AuthorEntity> ageLessThan(int age);
     
 }

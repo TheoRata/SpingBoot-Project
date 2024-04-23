@@ -7,10 +7,10 @@ import lombok.extern.java.Log;
 
 @SpringBootApplication
 @Log
-public class DatabasenewApplication{
+public class BooksApiApplication{
 	
 	public static void main(String[] args) {
-		SpringApplication.run(DatabasenewApplication.class, args);
+		SpringApplication.run(BooksApiApplication.class, args);
 	}
 
 	

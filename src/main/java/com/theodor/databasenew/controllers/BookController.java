@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -35,6 +36,13 @@ public class BookController {
         this.bookService = bookService;
     }
 
+    /**
+     * Creates or updates a book.
+     *
+     * @param  isbn    the ISBN of the book
+     * @param  bookDto the book data transfer object
+     * @return         the response entity containing the updated book DTO and the HTTP status code
+     */
     @PutMapping(path = "/books/{isbn}")
     public ResponseEntity<BookDto> createUpdateBook(@PathVariable("isbn") String isbn, @RequestBody BookDto bookDto) {
         BookEntity bookEntity = bookMapper.mapFrom(bookDto);
@@ -49,6 +57,11 @@ public class BookController {
         
     }
 
+    /**
+     * Retrieves a list of BookDto objects representing all books in the database.
+     *
+     * @return         	A List of BookDto objects representing all books in the database.
+     */
     @GetMapping(path = "/books")
     public List<BookDto> listBooks() {
         List<BookEntity> books = bookService.findAll(); 
@@ -59,6 +72,13 @@ public class BookController {
             );
     }
 
+    /**
+     * Retrieves a book by its ISBN and returns it as a ResponseEntity containing a BookDto.
+     *
+     * @param  isbn    the ISBN of the book to retrieve
+     * @return         a ResponseEntity containing the BookDto if found, or a ResponseEntity with
+     *                 HttpStatus.NOT_FOUND if not found
+     */
     @GetMapping(path = "/books/{isbn}")
     public ResponseEntity<BookDto> getBook(@PathVariable("isbn") String isbn) {
         Optional<BookEntity> foundBook = bookService.findOne(isbn);
@@ -68,5 +88,10 @@ public class BookController {
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
     
+    @DeleteMapping(path = "/books/{isbn}")
+    public ResponseEntity<BookDto> deleteBook(@PathVariable("isbn") String isbn){
+        bookService.delete(isbn);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
     
 }

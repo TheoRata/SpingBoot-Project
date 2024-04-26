@@ -1,4 +1,4 @@
-package com.theodor.databasenew.domain;
+package com.theodor.databasenew.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Book {
+public class AuthorDto {
 
-    private String isbn;
+    private Long id;
 
-    private String title;
+    private String name;
 
-    private Long authorId;
-
+    private Integer age;
+    
 }

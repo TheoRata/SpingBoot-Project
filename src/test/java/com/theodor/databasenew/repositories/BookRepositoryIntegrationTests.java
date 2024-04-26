@@ -82,7 +82,4 @@ public class BookRepositoryIntegrationTests {
         assertThat(result).isEmpty();
 
     }
-
-
-    
 }

@@ -36,6 +36,14 @@ public final class TestDataUtil {
                 .build();
         return author;
     }
+    public static AuthorDto createTestAutorDtoA() {
+        AuthorDto author = AuthorDto.builder()
+                .id(3L)
+                .name("Mihai Alexandru")
+                .age(52)
+                .build();
+        return author;
+    }
 
     public static BookEntity createTestBookA(final AuthorEntity author) {
         return BookEntity.builder()
